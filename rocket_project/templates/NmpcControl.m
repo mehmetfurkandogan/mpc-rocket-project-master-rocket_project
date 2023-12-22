@@ -23,7 +23,9 @@ classdef NmpcControl < handle
     end
     
     methods
-        function obj = NmpcControl(rocket, tf)
+        function obj = NmpcControl(rocket, tf, expected_delay)
+            
+            if nargin < 3, expected_delay = 0; end
            
             import casadi.*
             
