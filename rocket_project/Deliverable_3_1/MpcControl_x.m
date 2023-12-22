@@ -31,17 +31,17 @@ classdef MpcControl_x < MpcControlBase
             
             % NOTE: The matrices mpc.A, mpc.B, mpc.C and mpc.D are
             %       the DISCRETE-TIME MODEL of your system
-            f = [5000; deg2rad(10); 5000; 5000; 5000; deg2rad(10); 5000; 5000];
+            f = [deg2rad(10); deg2rad(10)];
             m = [0.26, 0.26]';
             
-            F = [1 0 0 0;-1 0 0 0;0 1 0 0;0 -1 0 0;0 0 1 0;0 0 -1 0; 0 0 0 1; 0 0 0 -1];
+            F = [0 1 0 0;0 -1 0 0];
             M = [1 -1]';
             Q = eye(nx);
             R = eye(nu);
             [K,~,~] = dlqr(mpc.A,mpc.B,Q,R);
             K = -K; 
             Xf = polytope([F;M*K],[f;m]);
-            Acl = [mpc.A+mpc.B*K];
+            Acl = mpc.A+mpc.B*K;
             while 1
                 prevXf = Xf;
                 [T,t] = double(Xf);
