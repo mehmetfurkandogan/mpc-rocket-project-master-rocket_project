@@ -31,18 +31,18 @@ classdef MpcControl_x < MpcControlBase
             
             % NOTE: The matrices mpc.A, mpc.B, mpc.C and mpc.D are
             %       the DISCRETE-TIME MODEL of your system
-            f = [5000, deg2rad(10), 5000, 5000]';
+            f = [5000; deg2rad(10); 5000; 5000; 5000; deg2rad(10); 5000; 5000];
             m = [0.26, 0.26]';
             
             F = [1 0 0 0;-1 0 0 0;0 1 0 0;0 -1 0 0;0 0 1 0;0 0 -1 0; 0 0 0 1; 0 0 0 -1];
-            H = [1 -1]';
+            M = [1 -1]';
 
             Q = eye(nx);
             R = eye(nu);
             Qf = idare(mpc.A,mpc.B,Q,R);
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             obj = U(:,1)'*R*U(:,1);
-            con = (X(:,2) == mpc.A*X(:,1) + mpc.B*U(:,1)) + (U(:,1) <= Umax) + (Umin<=U(:,1));
+            con = (X(:,2) == mpc.A*X(:,1) + mpc.B*U(:,1)) + (M*U(:,1) <= m);
             for k = 2:N-1
                 con = con + X(:,k+1) == mpc.A * X(:,k) + mpc.B * U(:,k);
                 con = con + (F*X(:,k) <= f) + (M*U(:,k) <= m);
