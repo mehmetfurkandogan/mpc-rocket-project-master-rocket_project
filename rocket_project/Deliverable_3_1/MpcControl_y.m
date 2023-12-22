@@ -33,17 +33,17 @@ classdef MpcControl_y < MpcControlBase
             %       the DISCRETE-TIME MODEL of your system
             
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
-            f = [5000; deg2rad(10); 5000; 5000; 5000; deg2rad(10); 5000; 5000];
+            f = [deg2rad(10); deg2rad(10)];
             m = [0.26, 0.26]';
             
-            F = [1 0 0 0;-1 0 0 0;0 1 0 0;0 -1 0 0;0 0 1 0;0 0 -1 0; 0 0 0 1; 0 0 0 -1];
+            F = [0 1 0 0;0 -1 0 0];
             M = [1 -1]';
             Q = eye(nx);
             R = eye(nu);
-            [K,~,~] = dlqr(mpc.A,mpc.B,Q,R);
+            [K,Qf,~] = dlqr(mpc.A,mpc.B,Q,R);
             K = -K; 
             Xf = polytope([F;M*K],[f;m]);
-            Acl = [mpc.A+mpc.B*K];
+            Acl = mpc.A+mpc.B*K;
             while 1
                 prevXf = Xf;
                 [T,t] = double(Xf);
@@ -54,7 +54,6 @@ classdef MpcControl_y < MpcControlBase
                 end
             end
             [Ff,ff] = double(Xf);
-            Qf = idare(mpc.A,mpc.B,Q,R);
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             obj = U(:,1)'*R*U(:,1);
             con = (X(:,2) == mpc.A*X(:,1) + mpc.B*U(:,1)) + (M*U(:,1) <= m) +(F*X(:,1) <= f);

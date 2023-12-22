@@ -38,7 +38,7 @@ classdef MpcControl_x < MpcControlBase
             M = [1 -1]';
             Q = eye(nx);
             R = eye(nu);
-            [K,~,~] = dlqr(mpc.A,mpc.B,Q,R);
+            [K,Qf,~] = dlqr(mpc.A,mpc.B,Q,R);
             K = -K; 
             Xf = polytope([F;M*K],[f;m]);
             Acl = mpc.A+mpc.B*K;
@@ -52,7 +52,6 @@ classdef MpcControl_x < MpcControlBase
                 end
             end
             [Ff,ff] = double(Xf);
-            Qf = idare(mpc.A,mpc.B,Q,R);
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             obj = U(:,1)'*R*U(:,1);
             con = (X(:,2) == mpc.A*X(:,1) + mpc.B*U(:,1)) + (M*U(:,1) <= m) +(F*X(:,1) <= f);
