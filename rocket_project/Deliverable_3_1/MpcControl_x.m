@@ -42,10 +42,10 @@ classdef MpcControl_x < MpcControlBase
             Qf = idare(mpc.A,mpc.B,Q,R);
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             obj = U(:,1)'*R*U(:,1);
-            con = (X(:,2) == mpc.A*X(:,1) + mpc.B*U(:,1)) + (M*U(:,1) <= m);
+            con = (X(:,2) == mpc.A*X(:,1) + mpc.B*U(:,1)) + (M*U(:,1) <= m) +(F*X(:,1) <= f);
             for k = 2:N-1
-                con = con + X(:,k+1) == mpc.A * X(:,k) + mpc.B * U(:,k);
-                con = con + (F*X(:,k) <= f) + (M*U(:,k) <= m);
+                con = [con, X(:,k+1) == mpc.A * X(:,k) + mpc.B * U(:,k)];
+                con = [con,(F*X(:,k) <= f) + (M*U(:,k) <= m)];
                 obj = obj + X(:,k)'*Q*X(:,k) + U(:,k)'*R*U(:,k);
             end
             obj = obj + X(:,N)'*Qf*X(:,N);
