@@ -31,23 +31,26 @@ classdef MpcControl_x < MpcControlBase
             
             % NOTE: The matrices mpc.A, mpc.B, mpc.C and mpc.D are
             %       the DISCRETE-TIME MODEL of your system
-            
+            Xmin = [-5000, -deg2rad(10), -5000, -5000]';
+            Xmax = [5000, deg2rad(10), 5000, 5000]';
+            Umin = -0.26;
+            Umax = 0.26;
             Q = eye(nx);
             R = eye(nu);
-            Qf = idare(mpc.A, mpc.B,Q,R);
+            Qf = idare(mpc.A,mpc.B,Q,R);
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
-            obj = 0;
-            for i = 1:N-1
-                obj = obj + X(:,i)*Q*X(:,i)' + U(:,i)*R*U(:,i)';
+            obj = U(:,1)'*R*U(:,1);
+            for i = 2:N-1
+                obj = obj + X(:,i)'*Q*X(:,i) + U(:,i)'*R*U(:,i);
             end
-            obj = obj + X(:,N)*Qf*X(:,N)';
-            con = [];
-            for k = 1:N-1
-                con = [con, X(:,k+1) == mpc.A * X(:,k) + mpc.B * U(:,k)];
-                con = [con, Umin <= U(:,k) <= Umax];
-                con = [con, Xmin <= X(:,k) <= Xmax];
+            obj = obj + X(:,N)'*Qf*X(:,N);
+            con = (X(:,2) == mpc.A*X(:,1) + mpc.B*U(:,1)) + (U(:,1) <= Umax) + (Umin<=U(:,1));
+            for k = 2:N-1
+                con = con + X(:,k+1) == mpc.A * X(:,k) + mpc.B * U(:,k);
+                con = con + (Umin <= U(:,k)) + (U(:,k) <= Umax);
+                con = con + (Xmin <= X(:,k)) +  (X(:,k)<= Xmax);
             end 
-            con = [con, X(:,N) == Xf];
+            
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
