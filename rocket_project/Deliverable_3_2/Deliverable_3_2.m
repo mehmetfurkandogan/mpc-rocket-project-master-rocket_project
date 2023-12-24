@@ -14,7 +14,7 @@ Tf = 10;
 
 %% mpc x
 x0_x = [0 0 0 0]';
-x_ref = [0 0 0 -4];
+x_ref = -4;
 
 % Open Loop Trajectory
 mpc_x = MpcControl_x(sys_x, Ts, Tf);
