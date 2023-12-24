@@ -31,15 +31,20 @@ classdef MpcControl_x < MpcControlBase
             
             % NOTE: The matrices mpc.A, mpc.B, mpc.C and mpc.D are
             %       the DISCRETE-TIME MODEL of your system
+            deltaX = X - x_ref;
+            deltaU = U - u_ref;
+
             f = [deg2rad(10); deg2rad(10)];
             m = [0.26, 0.26]';
             
             F = [0 1 0 0;0 -1 0 0];
             M = [1 -1]';
+
             Q = eye(nx);
             R = eye(nu);
             [K,Qf,~] = dlqr(mpc.A,mpc.B,Q,R);
-            K = -K; 
+            K = -K;
+
             Xf = polytope([F;M*K],[f;m]);
             Acl = mpc.A+mpc.B*K;
             while 1
@@ -51,6 +56,7 @@ classdef MpcControl_x < MpcControlBase
                     break
                 end
             end
+            Xf = Xf + xs;
             figure
             Xf.projection(1:2).plot();
             xlabel('\omega_y')
@@ -65,15 +71,16 @@ classdef MpcControl_x < MpcControlBase
             ylabel("x")
             [Ff,ff] = double(Xf);
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
-            obj = U(:,1)'*R*U(:,1);
-            con = (X(:,2) == mpc.A*X(:,1) + mpc.B*U(:,1)) + (M*U(:,1) <= m) +(F*X(:,1) <= f);
+            obj = deltaU(:,1)'*R*deltaU(:,1);
+            con = (deltaX(:,2) == mpc.A*deltaX(:,1) + mpc.B*deltaU(:,1)) + (M*deltaU(:,1) <= m) +(F*deltaX(:,1) <= f);
             for k = 2:N-1
-                con = [con, X(:,k+1) == mpc.A * X(:,k) + mpc.B * U(:,k)];
-                con = [con,(F*X(:,k) <= f) + (M*U(:,k) <= m)];
-                obj = obj + X(:,k)'*Q*X(:,k) + U(:,k)'*R*U(:,k);
+                con = [con, deltaX(:,k+1) == deltaX(:, 1)];
+                con = [con, deltaX(:,k+1) == mpc.A * deltaX(:,k) + mpc.B * deltaU(:,k)];
+                con = [con,(F*deltaX(:,k) <= f - F*x_ref) + (M*deltaU(:,k) <= m - M*u_ref)];
+                obj = obj + deltaX(:,k)'*Q*deltaX(:,k) + deltaU(:,k)'*R*deltaU(:,k);
             end
-            obj = obj + X(:,N)'*Qf*X(:,N);
-            con = [con, Ff*X(:,N) <= ff];
+            obj = obj + deltaX(:,N)'*Qf*deltaX(:,N);
+            con = [con, Ff*deltaX(:,N) <= ff];
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
