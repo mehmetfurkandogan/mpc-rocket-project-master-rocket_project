@@ -38,7 +38,7 @@ classdef MpcControl_y < MpcControlBase
             
             F = [0 1 0 0;0 -1 0 0];
             M = [1 -1]';
-            Q = eye(nx);
+            Q = 10*eye(nx);
             R = eye(nu);
             [K,Qf,~] = dlqr(mpc.A,mpc.B,Q,R);
             K = -K; 

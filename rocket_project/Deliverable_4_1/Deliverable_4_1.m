@@ -11,7 +11,7 @@ rocket = Rocket(Ts);
 [xs, us] = rocket.trim();
 sys = rocket.linearize(xs, us);
 [sys_x, sys_y, sys_z, sys_roll] = rocket.decompose(sys, xs, us);
-H = 50*Ts; % Closed-Loop Horizon length in seconds
+H = 150*Ts; % Closed-Loop Horizon length in seconds
 %% mpc definitions
 mpc_x = MpcControl_x(sys_x, Ts, H);
 mpc_y = MpcControl_y(sys_y, Ts, H);

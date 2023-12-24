@@ -52,8 +52,8 @@ classdef MpcControl_z < MpcControlBase
             
             F = [];
             M = [1 -1]';
-            Q = 8*eye(nx);
-            R = eye(nu);
+            Q = 150*eye(nx);
+            R = 0.1*eye(nu);
             [K,Qf,~] = dlqr(mpc.A,mpc.B,Q,R);
             K = -K; 
             Xf = polytope([F;M*K],[f;m]);
