@@ -33,17 +33,17 @@ classdef MpcControl_roll < MpcControlBase
             %       the DISCRETE-TIME MODEL of your system
             
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
-          
+            f = []';
             m = [20, 20]';
             
-          
+            F = [];
             M = [1 -1]';
             Q = 20*eye(nx);
             R = 0.1*eye(nu);
             [K,Qf,~] = dlqr(mpc.A,mpc.B,Q,R);
             K = -K; 
-            Xf = polytope([M*K],[m]);
-            Acl = [mpc.A+mpc.B*K];
+            Xf = polytope([F;M*K],[f;m]);
+            Acl = mpc.A+mpc.B*K;
             while 1
                 prevXf = Xf;
                 [T,t] = double(Xf);
@@ -59,15 +59,15 @@ classdef MpcControl_roll < MpcControlBase
             ylabel('\gamma')
             [Ff,ff] = double(Xf);
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
-            obj = U(:,1)'*R*U(:,1);
-            con = (X(:,2) == mpc.A*X(:,1) + mpc.B*U(:,1)) + (M*U(:,1) <= m);
+            obj = (U(:,1) - u_ref)'*R*(U(:,1) - u_ref);
+            con = ((X(:,2) - x_ref) == mpc.A*(X(:,1) - x_ref) + mpc.B*(U(:,1) - u_ref)) + (M*U(:,1) <= m);
             for k = 2:N-1
-                con = [con, X(:,k+1) == mpc.A * X(:,k) + mpc.B * U(:,k)];
-                con = [con,(M*U(:,k) <= m)];
-                obj = obj + X(:,k)'*Q*X(:,k) + U(:,k)'*R*U(:,k);
+                con = [con, (X(:,k+1) - x_ref) == mpc.A * (X(:,k) - x_ref) + mpc.B * (U(:,k) - u_ref)];
+                con = [con, (M*U(:,k) <= m)];
+                obj = obj + (X(:,k) - x_ref)'*Q*(X(:,k) - x_ref) + (U(:,k) - u_ref)'*R*(U(:,k) - u_ref);
             end
-            obj = obj + X(:,N)'*Qf*X(:,N);
-            con = [con, Ff*X(:,N) <= ff];
+            obj = obj + (X(:,N) - x_ref)'*Qf*(X(:,N) - x_ref);
+            con = [con, Ff*X(:,N) <= ff + Ff*x_ref];
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
@@ -98,9 +98,18 @@ classdef MpcControl_roll < MpcControlBase
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
-            obj = 0;
-            con = [xs == 0, us == 0];
+            R = eye(size(mpc.C,1));
+
+            f = []';
+            m = [80-56.6667 -(50 - 56.6667)]';
             
+            F = [];
+            M = [1 -1]';
+
+            obj = us'*R*us;
+            con = xs == mpc.A* xs + mpc.B * us;
+            con = [con, ref == mpc.C*xs];
+            con = [con, (M*us <= m)];
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
