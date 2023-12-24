@@ -105,8 +105,18 @@ classdef MpcControl_x < MpcControlBase
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
-            obj = 0;
-            con = [xs == 0, us == 0];
+            R = eye(nx);
+
+            f = [deg2rad(10); deg2rad(10)];
+            m = [0.26, 0.26]';
+            
+            F = [0 1 0 0;0 -1 0 0];
+            M = [1 -1]';
+
+            obj = us'*R*us;
+            con = xs == eye(size(mpc.A)) - mpc.A * xs - mpc.B * us;
+            con = [con, ref == mpc.C*us];
+            con = [con,(F*xs <= f) + (M*us <= m)];
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
