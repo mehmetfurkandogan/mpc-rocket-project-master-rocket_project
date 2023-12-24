@@ -18,6 +18,8 @@ x0_x = [0 0 0 3]';
 % Open Loop Trajectory
 mpc_x = MpcControl_x(sys_x, Ts, Tf);
 [~, T_opt, X_opt, U_opt] = mpc_x.get_u(x0_x);
+X_opt = X_opt + xs(1:4);
+U_opt = U_opt + us(1);
 U_opt(:,end+1) = NaN;
 ph = rocket.plotvis_sub(T_opt, X_opt, U_opt, sys_x, xs, us);
 
@@ -31,6 +33,8 @@ x0_y = [0 0 0 3]';
 % Open Loop Trajectory
 mpc_y = MpcControl_y(sys_y, Ts, Tf);
 [~, T_opt, X_opt, U_opt] = mpc_y.get_u(x0_y);
+X_opt = X_opt + xs(5:8);
+U_opt = U_opt + us(2);
 U_opt(:,end+1) = NaN;
 ph = rocket.plotvis_sub(T_opt, X_opt, U_opt, sys_y, xs, us);
 
@@ -44,6 +48,8 @@ x0_z = [0 3]';
 % Open Loop Trajectory
 mpc_z = MpcControl_z(sys_z, Ts, Tf);
 [~, T_opt, X_opt, U_opt] = mpc_z.get_u(x0_z);
+X_opt = X_opt + xs(9:10);
+U_opt = U_opt + us(3);
 U_opt(:,end+1) = NaN;
 ph = rocket.plotvis_sub(T_opt, X_opt, U_opt, sys_z, xs, us);
 
@@ -57,6 +63,8 @@ x0_roll = [0 deg2rad(40)]';
 % Open Loop Trajectory
 mpc_roll = MpcControl_roll(sys_roll, Ts, Tf);
 [u, T_opt, X_opt, U_opt] = mpc_roll.get_u(x0_roll);
+X_opt = X_opt - xs(11:12);
+U_opt = U_opt - us(4);
 U_opt(:,end+1) = NaN;
 ph = rocket.plotvis_sub(T_opt, X_opt, U_opt, sys_roll, xs, us);
 
