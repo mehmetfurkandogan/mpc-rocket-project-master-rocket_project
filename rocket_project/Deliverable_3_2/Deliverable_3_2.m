@@ -9,13 +9,12 @@ rocket = Rocket(Ts);
 [xs, us] = rocket.trim();
 sys = rocket.linearize(xs, us);
 [sys_x, sys_y, sys_z, sys_roll] = rocket.decompose(sys, xs, us);
-H = 20*Ts; % Closed-Loop Horizon length in seconds
+H = 50*Ts; % Closed-Loop Horizon length in seconds
 Tf = 10;
 
 %% mpc x
 x0_x = [0 0 0 0]';
-ref_x = [0 0 0 -4]';
-pos_ref = -4;
+pos_ref = 7;
 
 % Open Loop Trajectory
 % mpc_x = MpcControl_x(sys_x, Ts, Tf);
@@ -29,6 +28,7 @@ pos_ref = -4;
 mpc_x = MpcControl_x(sys_x, Ts, H);
 [T, X_sub, U_sub] = rocket.simulate_f(sys_x, x0_x, Tf, @mpc_x.get_u, pos_ref);
 ph = rocket.plotvis_sub(T, X_sub, U_sub, sys_x, xs, us);
+
 %% mpc y
 x0_y = [0 0 0 0]';
 x_ref = [0 0 0 -4];

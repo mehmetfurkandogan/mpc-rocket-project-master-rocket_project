@@ -72,7 +72,7 @@ classdef MpcControl_x < MpcControlBase
             obj = (U(:,1) - u_ref)'*R*(U(:,1) - u_ref);
             con = ((X(:,2) - x_ref) == mpc.A*(X(:,1) - x_ref) + mpc.B*(U(:,1) - u_ref)) + (M*U(:,1) <= m) +(F*X(:,1) <= f);
             for k = 2:N-1
-                con = [con, (X(:,k+1) - x_ref) == (X(:, 1) - x_ref)];
+%               con = [con, (X(:,k+1) - x_ref) == (X(:, 1) - x_ref)];
                 con = [con, (X(:,k+1) - x_ref) == mpc.A * (X(:,k) - x_ref) + mpc.B * (U(:,k) - u_ref)];
                 con = [con,(F*X(:,k) <= f) + (M*U(:,k) <= m)];
                 obj = obj + (X(:,k) - x_ref)'*Q*(X(:,k) - x_ref) + (U(:,k) - u_ref)'*R*(U(:,k) - u_ref);
@@ -110,7 +110,7 @@ classdef MpcControl_x < MpcControlBase
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
-            R = eye(nx);
+            R = eye(size(mpc.C,1));
 
             f = [deg2rad(10); deg2rad(10)];
             m = [0.26, 0.26]';
@@ -118,11 +118,11 @@ classdef MpcControl_x < MpcControlBase
             F = [0 1 0 0;0 -1 0 0];
             M = [1 -1]';
 
-            obj = us'*R*us;
-            con = xs == (eye(size(mpc.A)) - mpc.A) * xs - mpc.B * us;
-            con = [con, ref == mpc.C*us];
-            con = [con,(F*xs <= f) + (M*us <= m)];
-            
+            obj = (mpc.C*xs - ref)'*R*(mpc.C*xs - ref);
+            con = xs == mpc.A* xs + mpc.B * us;
+%           con = [con, ref == mpc.C*xs];
+            con = [con,(F*xs <= f), (M*us <= m)];
+        
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
