@@ -40,30 +40,30 @@ classdef MpcControl_x < MpcControlBase
             R = eye(nu);
             [K,Qf,~] = dlqr(mpc.A,mpc.B,Q,R);
             K = -K; 
-            Xf = polytope([F;M*K],[f;m]);
-            Acl = mpc.A+mpc.B*K;
-            while 1
-                prevXf = Xf;
-                [T,t] = double(Xf);
-                preXf = polytope(T*Acl,t);
-                Xf = intersect(Xf, preXf);
-                if isequal(prevXf, Xf)
-                    break
-                end
-            end
-            figure
-            Xf.projection(1:2).plot();
-            xlabel('\omega_y')
-            ylabel('\beta')
-            figure
-            Xf.projection(2:3).plot();
-            xlabel("\beta")
-            ylabel("v_x")
-            figure
-            Xf.projection(3:4).plot();
-            xlabel("v_x")
-            ylabel("x")
-            [Ff,ff] = double(Xf);
+            % Xf = polytope([F;M*K],[f;m]);
+            % Acl = mpc.A+mpc.B*K;
+            % while 1
+            %     prevXf = Xf;
+            %     [T,t] = double(Xf);
+            %     preXf = polytope(T*Acl,t);
+            %     Xf = intersect(Xf, preXf);
+            %     if isequal(prevXf, Xf)
+            %         break
+            %     end
+            % end
+            % figure
+            % Xf.projection(1:2).plot();
+            % xlabel('\omega_y')
+            % ylabel('\beta')
+            % figure
+            % Xf.projection(2:3).plot();
+            % xlabel("\beta")
+            % ylabel("v_x")
+            % figure
+            % Xf.projection(3:4).plot();
+            % xlabel("v_x")
+            % ylabel("x")
+            % [Ff,ff] = double(Xf);
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             obj = U(:,1)'*R*U(:,1);
             con = (X(:,2) == mpc.A*X(:,1) + mpc.B*U(:,1)) + (M*U(:,1) <= m) +(F*X(:,1) <= f);
@@ -73,7 +73,7 @@ classdef MpcControl_x < MpcControlBase
                 obj = obj + X(:,k)'*Q*X(:,k) + U(:,k)'*R*U(:,k);
             end
             obj = obj + X(:,N)'*Qf*X(:,N);
-            con = [con, Ff*X(:,N) <= ff];
+            % con = [con, Ff*X(:,N) <= ff];
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
@@ -105,9 +105,19 @@ classdef MpcControl_x < MpcControlBase
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
-            obj = 0;
-            con = [xs == 0, us == 0];
+            R = eye(nx);
+
+            f = [deg2rad(10); deg2rad(10)];
+            m = [0.26, 0.26]';
             
+            F = [0 1 0 0;0 -1 0 0];
+            M = [1 -1]';
+
+            obj = us'*R*us;
+            con = xs == eye(size(mpc.A)) - mpc.A * xs - mpc.B * us;
+            con = [con, ref == mpc.C*us];
+            con = [con,(F*xs <= f) + (M*us <= m)];
+
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
