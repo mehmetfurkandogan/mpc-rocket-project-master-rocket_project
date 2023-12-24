@@ -53,6 +53,10 @@ classdef MpcControl_roll < MpcControlBase
                     break
                 end
             end
+            figure
+            Xf.plot();
+            xlabel('\omega_z')
+            ylabel('\gamma')
             [Ff,ff] = double(Xf);
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             obj = U(:,1)'*R*U(:,1);

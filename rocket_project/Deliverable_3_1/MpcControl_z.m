@@ -67,6 +67,10 @@ classdef MpcControl_z < MpcControlBase
                     break
                 end
             end
+            figure
+            Xf.plot();
+            xlabel('v_z')
+            ylabel('z')
             [Ff,ff] = double(Xf);
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             obj = U(:,1)'*R*U(:,1);
