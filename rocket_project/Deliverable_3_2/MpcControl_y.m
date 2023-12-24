@@ -53,18 +53,6 @@ classdef MpcControl_y < MpcControlBase
                     break
                 end
             end
-            figure
-            Xf.projection(1:2).plot();
-            xlabel('\omega_x')
-            ylabel('\alpha')
-            figure
-            Xf.projection(2:3).plot();
-            xlabel("\alpha")
-            ylabel("v_y")
-            figure
-            Xf.projection(3:4).plot();
-            xlabel("v_y")
-            ylabel("y")
             [Ff,ff] = double(Xf);
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             obj = (U(:,1) - u_ref)'*R*(U(:,1) - u_ref);
