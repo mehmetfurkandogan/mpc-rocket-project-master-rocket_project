@@ -51,8 +51,8 @@ classdef NmpcControl < handle
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             
-            Q = eye(nx);
-            R = eye(nu);
+            Q = 100*eye(nx);
+            R = 0.1*eye(nu);
             
             ubx(4) = deg2rad(75);
             ubx(5) = deg2rad(75);
@@ -84,7 +84,7 @@ classdef NmpcControl < handle
 
             for i = 1:N-1
                 cost = cost + (X_sym(:, i) - X_ref)'*Q*(X_sym(:, i) - X_ref) + (U_sym(:, i) - U_ref)'*R*(U_sym(:, i) - U_ref);
-                eq_constr = [eq_constr; X_sym(:, i+1) - X_sym(:, i) + rocket.f(X_sym(:, i), U_sym(:, i))*rocket.Ts];
+                eq_constr = [eq_constr; X_sym(:, i+1) - X_sym(:, i) - rocket.f(X_sym(:, i), U_sym(:, i))*rocket.Ts];
             end
             
             % Inequality constraints (Casadi SX), each entry <= 0
