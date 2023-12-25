@@ -5,9 +5,10 @@ close all; clear; clc;
 %% TODO: This file should produce all the plots for the deliverable
 Ts = 1/40; 
 rocket = Rocket(Ts);
-delay = 2;
+expected_delay = 5;
+delay = 5;
 H = 20*Ts;
-nmpc = NmpcControl(rocket, H, delay);
+nmpc = NmpcControl(rocket, H, expected_delay);
 x0 = zeros(12, 1);
 ref = [0.5, 0, 1, deg2rad(65)]';
 Tf = 10;
