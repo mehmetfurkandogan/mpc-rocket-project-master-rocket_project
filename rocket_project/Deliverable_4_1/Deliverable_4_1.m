@@ -11,7 +11,7 @@ rocket = Rocket(Ts);
 [xs, us] = rocket.trim();
 sys = rocket.linearize(xs, us);
 [sys_x, sys_y, sys_z, sys_roll] = rocket.decompose(sys, xs, us);
-H = 150*Ts; % Closed-Loop Horizon length in seconds
+H = 50*Ts; % Closed-Loop Horizon length in seconds
 %% mpc definitions
 mpc_x = MpcControl_x(sys_x, Ts, H);
 mpc_y = MpcControl_y(sys_y, Ts, H);
@@ -28,7 +28,7 @@ ref4 = [2 2 2 deg2rad(40)]';
 U_opt(:,end+1) = nan;
 ph = rocket.plotvis(T_opt, X_opt, U_opt, ref4); % Plot as usual
 % Setup reference function
-ref = @(t , x ) ref_TVC(t );
+ref = @(t , x ) ref_TVC(t);
 % Simulate
 Tf = 30;
 [T, X, U, Ref] = rocket.simulate(x0, Tf, @mpc.get_u, ref);
