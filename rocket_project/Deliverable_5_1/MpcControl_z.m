@@ -55,19 +55,7 @@ classdef MpcControl_z < MpcControlBase
             Q = 150*eye(nx);
             R = 0.1*eye(nu);
             [K,Qf,~] = dlqr(mpc.A,mpc.B,Q,R);
-            K = -K; 
-            Xf = polytope([F;M*K],[f;m]);
-            Acl = mpc.A+mpc.B*K;
-            while 1
-                prevXf = Xf;
-                [T,t] = double(Xf);
-                preXf = polytope(T*Acl,t);
-                Xf = intersect(Xf, preXf);
-                if isequal(prevXf, Xf)
-                    break
-                end
-            end
-            [Ff,ff] = double(Xf);
+
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             obj = (U(:,1) - u_ref)'*R*(U(:,1) - u_ref);
             con = ((X(:,2) - x_ref) == mpc.A*(X(:,1) - x_ref) + mpc.B*(U(:,1) - u_ref)) + (M*U(:,1) <= m);
@@ -77,7 +65,6 @@ classdef MpcControl_z < MpcControlBase
                 obj = obj + (X(:,k) - x_ref)'*Q*(X(:,k) - x_ref) + (U(:,k) - u_ref)'*R*(U(:,k) - u_ref);
             end
             obj = obj + (X(:,N) - x_ref)'*Qf*(X(:,N) - x_ref);
-            con = [con, Ff*X(:,N) <= ff + Ff*x_ref];
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
@@ -146,11 +133,19 @@ classdef MpcControl_z < MpcControlBase
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
-            
-            A_bar = [];
-            B_bar = [];
-            C_bar = [];
-            L = [];
+            [nx,nu] = size(mpc.B);
+            ny = size(mpc.C, 1);
+            nd = 1;
+            A_bar = [mpc.A mpc.B; zeros(nu, nx) eye(nu)];
+            B_bar = [mpc.B; zeros(nd,nu)];
+            C_bar = [mpc.C ones(ny, nu)];
+%             plant_d = ss(A_bar, B_bar, C_bar, [], -1);
+%             plant_d.InputName = "un";
+%             plant_d.OutputName = "y";
+%             sum = sumblk("un = u + d");
+%             sys = connect(plant_d, sum, {"u","d"}, {"y"});
+%             [kalmf,L,P] = kalman(sys,1,1,0);
+            L = -place(A_bar',C_bar',[0.5,0.6,0.7])';
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
