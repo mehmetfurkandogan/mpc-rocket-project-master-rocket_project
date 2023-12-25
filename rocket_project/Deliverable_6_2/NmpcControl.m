@@ -137,7 +137,7 @@ classdef NmpcControl < handle
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
 
-            u_init = [0, 0, 56.6667, 0]; % Replace this by a better initialization
+            u_init = [0, 0, 56.6667, 0]'; % Replace this by a better initialization
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -155,7 +155,11 @@ classdef NmpcControl < handle
             % Simulate x_ for 'delay' timesteps
             x_ = x0;
             % ...
-       
+            
+            for i = 1:delay
+                x_ = x_ + obj.rocket.f(x_, mem_u(:, i))*obj.rocket.Ts;
+            end
+
             x0 = x_;
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -172,7 +176,7 @@ classdef NmpcControl < handle
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % Delay compensation: Save current u
             if obj.expected_delay > 0
-               % obj.mem_u = ...
+               obj.mem_u = repmat(u, 1, obj.expected_delay);
             end
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
