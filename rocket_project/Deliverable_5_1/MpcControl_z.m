@@ -52,8 +52,8 @@ classdef MpcControl_z < MpcControlBase
             
             F = [];
             M = [1 -1]';
-            Q = 150*eye(nx);
-            R = 0.1*eye(nu);
+            Q = 100*eye(nx);
+            R = 0.01*eye(nu);
             [K,Qf,~] = dlqr(mpc.A,mpc.B,Q,R);
 
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
@@ -102,6 +102,7 @@ classdef MpcControl_z < MpcControlBase
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
             R = eye(size(mpc.C,1));
+            [ny, nu] = size(mpc.C);
 
             f = []';
             m = [80-56.6667 -(50 - 56.6667)]';
@@ -110,8 +111,8 @@ classdef MpcControl_z < MpcControlBase
             M = [1 -1]';
 
             obj = us'*R*us;
-            con = xs == mpc.A* xs + mpc.B * us;
-            con = [con, ref == mpc.C*xs];
+            con = xs == mpc.A* xs + mpc.B * us + mpc.B * d_est;
+            con = [con, ref == mpc.C*xs + ones(ny,nu) * d_est];
             con = [con, (M*us <= m)];
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
@@ -139,12 +140,6 @@ classdef MpcControl_z < MpcControlBase
             A_bar = [mpc.A mpc.B; zeros(nu, nx) eye(nu)];
             B_bar = [mpc.B; zeros(nd,nu)];
             C_bar = [mpc.C ones(ny, nu)];
-%             plant_d = ss(A_bar, B_bar, C_bar, [], -1);
-%             plant_d.InputName = "un";
-%             plant_d.OutputName = "y";
-%             sum = sumblk("un = u + d");
-%             sys = connect(plant_d, sum, {"u","d"}, {"y"});
-%             [kalmf,L,P] = kalman(sys,1,1,0);
             L = -place(A_bar',C_bar',[0.5,0.6,0.7])';
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
