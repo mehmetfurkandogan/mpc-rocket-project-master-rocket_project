@@ -12,7 +12,7 @@ nmpc = NmpcControl(rocket, H);
 
 % MPC reference with default maximum roll = 15deg
 % ref = [2,2,2,deg2rad(40)]';
-% ref = @(t_, x_)ref_TVC(t_/2); 
+% ref = @(t_, x_) ref_TVC(t_); 
 
 % MPC reference with specified maximum roll = 50deg 
 rollmax = deg2rad(50); 
@@ -24,7 +24,8 @@ ref = @(t_, x_) ref_TVC(t_/2, rollmax);
 % U_opt(:,end+1) = nan; 
 % ph = rocket.plotvis(T_opt, X_opt, U_opt, ref); 
 
-Tf = 60; 
+Tf = 60;
+rocket.anim_rate = 3;
 [T,X,U,Ref] = rocket.simulate(x0,Tf, @nmpc.get_u, ref);
 rocket.anim_rate = 3;
 ph = rocket.plotvis(T, X, U, Ref);

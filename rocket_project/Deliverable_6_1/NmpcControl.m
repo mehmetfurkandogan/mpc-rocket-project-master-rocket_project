@@ -52,7 +52,7 @@ classdef NmpcControl < handle
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             
             Q = 100*eye(nx);
-            R = 0.1*eye(nu);
+            R = 0.01*eye(nu);
             
             ubx(4) = deg2rad(75);
             ubx(5) = deg2rad(75);
