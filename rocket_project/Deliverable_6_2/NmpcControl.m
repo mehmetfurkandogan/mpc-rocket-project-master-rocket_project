@@ -70,7 +70,8 @@ classdef NmpcControl < handle
             U_ref = [SX.zeros(1, 4)]';
 
             %Linearize
-            lin_sys = rocket.linearize();
+            [xs, us] = rocket.trim();
+            lin_sys = rocket.linearize(xs, us);
             dis_sys = c2d(lin_sys, rocket.Ts);
             P = idare(dis_sys.A, dis_sys.B, Q, R, [], []);
 
@@ -135,7 +136,7 @@ classdef NmpcControl < handle
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
 
-            u_init = [0, 0, 56.6667, 0]'; % Replace this by a better initialization
+            u_init = us; % Replace this by a better initialization
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
