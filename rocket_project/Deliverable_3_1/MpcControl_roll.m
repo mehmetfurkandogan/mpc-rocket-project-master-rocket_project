@@ -57,8 +57,8 @@ classdef MpcControl_roll < MpcControlBase
             % Plotting the terminal invariant set
             f1 = figure('name','Terminal Invariant Set','numberTitle','off');
             Xf.plot();
-            xlabel('\omega_z')
-            ylabel('\gamma')
+            xlabel('\omega_z (rad/s)')
+            ylabel('\gamma (rad)')
             exportgraphics(f1,'plots/tis_roll.eps', BackgroundColor='none',ContentType='vector')
 
             [Ff,ff] = double(Xf);

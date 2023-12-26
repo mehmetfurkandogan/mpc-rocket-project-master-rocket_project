@@ -57,20 +57,20 @@ classdef MpcControl_y < MpcControlBase
             % Plotting the terminal invariant set
             f1 = figure('name','Terminal Invariant Set','numberTitle','off');
             Xf.projection(1:2).plot();
-            xlabel('\omega_x')
-            ylabel('\alpha')
+            xlabel('\omega_x (rad/s)')
+            ylabel('\alpha (rad)')
             exportgraphics(f1,'plots/tis_y1.eps', BackgroundColor='none',ContentType='vector')
 
             f2 = figure('name','Terminal Invariant Set','numberTitle','off');
             Xf.projection(2:3).plot();
-            xlabel("\alpha")
-            ylabel("v_y")
+            xlabel("\alpha (rad)")
+            ylabel("v_y (m/s)")
             exportgraphics(f2,'plots/tis_y2.eps', BackgroundColor='none',ContentType='vector')
 
             f3 = figure('name','Terminal Invariant Set','numberTitle','off');
             Xf.projection(3:4).plot();
-            xlabel("v_y")
-            ylabel("y")
+            xlabel("v_y (m/s)")
+            ylabel("y (m)")
             exportgraphics(f3,'plots/tis_y3.eps', BackgroundColor='none',ContentType='vector')
 
             [Ff,ff] = double(Xf);

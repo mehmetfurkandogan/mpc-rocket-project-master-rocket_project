@@ -71,8 +71,8 @@ classdef MpcControl_z < MpcControlBase
             % Plotting the terminal invariant set
             f1 = figure('name','Terminal Invariant Set','numberTitle','off');
             Xf.plot();
-            xlabel('v_z')
-            ylabel('z')
+            xlabel('v_z (m/s)')
+            ylabel('z (m)')
             exportgraphics(f1,'plots/tis_z.eps', BackgroundColor='none',ContentType='vector')
 
             [Ff,ff] = double(Xf);
