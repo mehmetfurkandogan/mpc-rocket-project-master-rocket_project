@@ -40,20 +40,7 @@ classdef MpcControl_y < MpcControlBase
             M = [1 -1]';
             Q = 10*eye(nx);
             R = eye(nu);
-            [K,Qf,~] = dlqr(mpc.A,mpc.B,Q,R);
-            K = -K; 
-            Xf = polytope([F;M*K],[f;m]);
-            Acl = mpc.A+mpc.B*K;
-            while 1
-                prevXf = Xf;
-                [T,t] = double(Xf);
-                preXf = polytope(T*Acl,t);
-                Xf = intersect(Xf, preXf);
-                if isequal(prevXf, Xf)
-                    break
-                end
-            end
-            [Ff,ff] = double(Xf);
+            [~,Qf,~] = dlqr(mpc.A,mpc.B,Q,R);
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             obj = (U(:,1) - u_ref)'*R*(U(:,1) - u_ref);
             con = ((X(:,2) - x_ref) == mpc.A*(X(:,1) - x_ref) + mpc.B*(U(:,1) - u_ref)) + (M*U(:,1) <= m) +(F*X(:,1) <= f);
@@ -63,7 +50,6 @@ classdef MpcControl_y < MpcControlBase
                 obj = obj + (X(:,k) - x_ref)'*Q*(X(:,k) - x_ref) + (U(:,k) - u_ref)'*R*(U(:,k) - u_ref);
             end
             obj = obj + (X(:,N) - x_ref)'*Qf*(X(:,N) - x_ref);
-            con = [con, Ff*X(:,N) <= ff + Ff*x_ref];
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             

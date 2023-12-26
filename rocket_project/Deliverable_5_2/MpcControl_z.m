@@ -54,7 +54,7 @@ classdef MpcControl_z < MpcControlBase
             M = [1 -1]';
             Q = 100*eye(nx);
             R = 0.01*eye(nu);
-            [K,Qf,~] = dlqr(mpc.A,mpc.B,Q,R);
+            [~,Qf,~] = dlqr(mpc.A,mpc.B,Q,R);
 
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             obj = (U(:,1) - u_ref)'*R*(U(:,1) - u_ref);
@@ -102,7 +102,6 @@ classdef MpcControl_z < MpcControlBase
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
             R = eye(size(mpc.C,1));
-            [ny, nu] = size(mpc.C);
 
             f = []';
             m = [80-56.6667 -(50 - 56.6667)]';
