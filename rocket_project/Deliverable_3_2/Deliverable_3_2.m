@@ -24,12 +24,13 @@ X_opt = X_opt + xs(1:4);
 U_opt = U_opt + us(1);
 U_opt(:,end+1) = NaN;
 ph = rocket.plotvis_sub(T_opt, X_opt, U_opt, sys_x, xs, us, pos_ref);
+exportgraphics(gcf,'plots/x_ol.eps', BackgroundColor='none',ContentType='vector')
 
 % Closed Loop Trajectory
 mpc_x = MpcControl_x(sys_x, Ts, H);
 [T, X_sub, U_sub] = rocket.simulate_f(sys_x, x0_x, Tf, @mpc_x.get_u, pos_ref);
 ph = rocket.plotvis_sub(T, X_sub, U_sub, sys_x, xs, us, pos_ref);
-
+exportgraphics(gcf,'plots/x_cl.eps', BackgroundColor='none',ContentType='vector')
 %% mpc y
 x0_y = [0 0 0 0]';
 
@@ -40,11 +41,13 @@ X_opt = X_opt + xs(5:8);
 U_opt = U_opt + us(2);
 U_opt(:,end+1) = NaN;
 ph = rocket.plotvis_sub(T_opt, X_opt, U_opt, sys_y, xs, us, pos_ref);
+exportgraphics(gcf,'plots/y_ol.eps', BackgroundColor='none',ContentType='vector')
 
 % Closed Loop Trajectory
 mpc_y = MpcControl_y(sys_y, Ts, H);
 [T, X_sub, U_sub] = rocket.simulate_f(sys_y, x0_y, Tf, @mpc_y.get_u, pos_ref);
 ph = rocket.plotvis_sub(T, X_sub, U_sub, sys_y, xs, us, pos_ref);
+exportgraphics(gcf,'plots/y_cl.eps', BackgroundColor='none',ContentType='vector')
 %% mpc z 
 x0_z = [0 0]';
 
@@ -55,11 +58,13 @@ X_opt = X_opt + xs(9:10);
 U_opt = U_opt + us(3);
 U_opt(:,end+1) = NaN;
 ph = rocket.plotvis_sub(T_opt, X_opt, U_opt, sys_z, xs, us, pos_ref);
+exportgraphics(gcf,'plots/z_ol.eps', BackgroundColor='none',ContentType='vector')
 
 % Closed Loop Trajectory
 mpc_z = MpcControl_z(sys_z, Ts, H);
 [T, X_sub, U_sub] = rocket.simulate_f(sys_z, x0_z, Tf, @mpc_z.get_u, pos_ref);
 ph = rocket.plotvis_sub(T, X_sub, U_sub, sys_z, xs, us, pos_ref);
+exportgraphics(gcf,'plots/z_cl.eps', BackgroundColor='none',ContentType='vector')
 %% mpc roll
 x0_roll = [0 0]';
 
@@ -70,8 +75,10 @@ X_opt = X_opt - xs(11:12);
 U_opt = U_opt - us(4);
 U_opt(:,end+1) = NaN;
 ph = rocket.plotvis_sub(T_opt, X_opt, U_opt, sys_roll, xs, us, roll_ref);
+exportgraphics(gcf,'plots/roll_ol.eps', BackgroundColor='none',ContentType='vector')
 
 % Closed Loop Trajectory
 mpc_roll = MpcControl_roll(sys_roll, Ts, H);
 [T, X_sub, U_sub] = rocket.simulate_f(sys_roll, x0_roll, Tf, @mpc_roll.get_u, roll_ref);
 ph = rocket.plotvis_sub(T, X_sub, U_sub, sys_roll, xs, us, roll_ref);
+exportgraphics(gcf,'plots/roll_cl.eps', BackgroundColor='none',ContentType='vector')
