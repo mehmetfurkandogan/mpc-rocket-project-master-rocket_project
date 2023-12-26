@@ -25,9 +25,11 @@ ref = [1.2, 0, 3, 0]';
 rocket.mass = 2.13;
 %% 
 [T, X, U, Ref] = rocket.simulate(x0, Tf, @mpc.get_u, ref);
-rocket.anim_rate = 1; % Increase this to make the animation faster
+rocket.anim_rate = 10; % Increase this to make the animation faster
 ph = rocket.plotvis(T, X, U, Ref);
+exportgraphics(ph.fig,'plots/offset_tracking.eps', BackgroundColor='none',ContentType='vector')
 %% 
 [T, X, U, Ref, Z_hat] = rocket.simulate_est_z(x0, Tf, @mpc.get_u, ref, mpc_z, sys_z);
-rocket.anim_rate = 3; % Increase this to make the animation faster
+rocket.anim_rate = 10; % Increase this to make the animation faster
 ph = rocket.plotvis(T, X, U, Ref);
+exportgraphics(ph.fig,'plots/offset_free_tracking.eps', BackgroundColor='none',ContentType='vector')

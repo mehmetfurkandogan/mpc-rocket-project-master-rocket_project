@@ -28,3 +28,4 @@ rocket.mass_rate = -0.27;
 [T, X, U, Ref, Z_hat] = rocket.simulate_est_z(x0, Tf, @mpc.get_u, ref, mpc_z, sys_z);
 rocket.anim_rate = 3; % Increase this to make the animation faster
 ph = rocket.plotvis(T, X, U, Ref);
+exportgraphics(ph.fig,'plots/decreasing_mass.eps', BackgroundColor='none',ContentType='vector')
