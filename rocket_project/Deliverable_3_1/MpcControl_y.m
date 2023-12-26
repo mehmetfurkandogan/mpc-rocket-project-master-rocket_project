@@ -53,18 +53,26 @@ classdef MpcControl_y < MpcControlBase
                     break
                 end
             end
-            figure
+
+            % Plotting the terminal invariant set
+            f1 = figure('name','Terminal Invariant Set','numberTitle','off');
             Xf.projection(1:2).plot();
             xlabel('\omega_x')
             ylabel('\alpha')
-            figure
+            exportgraphics(f1,'plots/tis_y1.eps', BackgroundColor='none',ContentType='vector')
+
+            f2 = figure('name','Terminal Invariant Set','numberTitle','off');
             Xf.projection(2:3).plot();
             xlabel("\alpha")
             ylabel("v_y")
-            figure
+            exportgraphics(f2,'plots/tis_y2.eps', BackgroundColor='none',ContentType='vector')
+
+            f3 = figure('name','Terminal Invariant Set','numberTitle','off');
             Xf.projection(3:4).plot();
             xlabel("v_y")
             ylabel("y")
+            exportgraphics(f3,'plots/tis_y3.eps', BackgroundColor='none',ContentType='vector')
+
             [Ff,ff] = double(Xf);
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             obj = U(:,1)'*R*U(:,1);

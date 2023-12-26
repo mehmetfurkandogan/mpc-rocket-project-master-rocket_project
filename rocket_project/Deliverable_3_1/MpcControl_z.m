@@ -67,10 +67,14 @@ classdef MpcControl_z < MpcControlBase
                     break
                 end
             end
-            figure
+
+            % Plotting the terminal invariant set
+            f1 = figure('name','Terminal Invariant Set','numberTitle','off');
             Xf.plot();
             xlabel('v_z')
             ylabel('z')
+            exportgraphics(f1,'plots/tis_z.eps', BackgroundColor='none',ContentType='vector')
+
             [Ff,ff] = double(Xf);
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             obj = U(:,1)'*R*U(:,1);
