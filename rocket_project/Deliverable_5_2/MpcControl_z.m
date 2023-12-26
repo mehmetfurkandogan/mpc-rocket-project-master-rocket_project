@@ -112,7 +112,7 @@ classdef MpcControl_z < MpcControlBase
 
             obj = us'*R*us;
             con = xs == mpc.A* xs + mpc.B * us + mpc.B * d_est;
-            con = [con, ref == mpc.C*xs + ones(ny,nu) * d_est];
+            con = [con, ref == mpc.C*xs];
             con = [con, (M*us <= m)];
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
@@ -139,7 +139,7 @@ classdef MpcControl_z < MpcControlBase
             nd = 1;
             A_bar = [mpc.A mpc.B; zeros(nu, nx) eye(nu)];
             B_bar = [mpc.B; zeros(nd,nu)];
-            C_bar = [mpc.C ones(ny, nu)];
+            C_bar = [mpc.C zeros(ny, nu)];
             L = -place(A_bar',C_bar',[0.4,0.5,0.6])';
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
