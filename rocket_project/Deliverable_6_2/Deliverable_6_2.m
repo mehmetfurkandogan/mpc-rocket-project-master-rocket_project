@@ -16,4 +16,5 @@ rocket.mass = 1.75;
 rocket.delay = delay; 
 [T, X, U, Ref] = rocket.simulate(x0, Tf, @nmpc.get_u, ref);
 ph = rocket.plotvis(T, X, U, Ref);
+exportgraphics(ph.fig,'plots/delay_compansated_nmpc.eps', BackgroundColor='none',ContentType='vector')
 
