@@ -77,7 +77,7 @@ classdef MpcControl_z < MpcControlBase
 
             [Ff,ff] = double(Xf);
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
-            obj = U(:,1)'*R*U(:,1);
+            obj = U(:,1)'*R*U(:,1) + X(:,1)'*Q*X(:,1);
             con = (X(:,2) == mpc.A*X(:,1) + mpc.B*U(:,1)) + (M*U(:,1) <= m);
             for k = 2:N-1
                 con = [con, X(:,k+1) == mpc.A * X(:,k) + mpc.B * U(:,k)];

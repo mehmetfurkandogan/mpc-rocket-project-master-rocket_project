@@ -33,17 +33,17 @@ classdef MpcControl_roll < MpcControlBase
             %       the DISCRETE-TIME MODEL of your system
             
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
-          
+            f = []';
             m = [20, 20]';
             
-          
+            F = []';
             M = [1 -1]';
             Q = 20*eye(nx);
             R = 0.1*eye(nu);
             [K,Qf,~] = dlqr(mpc.A,mpc.B,Q,R);
             K = -K; 
-            Xf = polytope([M*K],[m]);
-            Acl = [mpc.A+mpc.B*K];
+            Xf = polytope([F;M*K],[f;m]);
+            Acl = mpc.A+mpc.B*K;
             while 1
                 prevXf = Xf;
                 [T,t] = double(Xf);
@@ -63,7 +63,7 @@ classdef MpcControl_roll < MpcControlBase
 
             [Ff,ff] = double(Xf);
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
-            obj = U(:,1)'*R*U(:,1);
+            obj = U(:,1)'*R*U(:,1) + X(:,1)'*Q*X(:,1);
             con = (X(:,2) == mpc.A*X(:,1) + mpc.B*U(:,1)) + (M*U(:,1) <= m);
             for k = 2:N-1
                 con = [con, X(:,k+1) == mpc.A * X(:,k) + mpc.B * U(:,k)];

@@ -57,7 +57,7 @@ classdef MpcControl_z < MpcControlBase
             [~,Qf,~] = dlqr(mpc.A,mpc.B,Q,R);
 
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
-            obj = (U(:,1) - u_ref)'*R*(U(:,1) - u_ref);
+            obj = (U(:,1) - u_ref)'*R*(U(:,1) - u_ref) + (X(:,1) - x_ref)'*Q*(X(:,1) - x_ref);
             con = ((X(:,2) - x_ref) == mpc.A*(X(:,1) - x_ref) + mpc.B*(U(:,1) - u_ref)) + (M*U(:,1) <= m);
             for k = 2:N-1
                 con = [con, (X(:,k+1) - x_ref) == mpc.A * (X(:,k) - x_ref) + mpc.B * (U(:,k) - u_ref)];
