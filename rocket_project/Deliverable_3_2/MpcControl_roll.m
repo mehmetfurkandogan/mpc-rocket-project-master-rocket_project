@@ -97,7 +97,7 @@ classdef MpcControl_roll < MpcControlBase
             R = eye(size(mpc.C,1));
 
             f = []';
-            m = [20 -20]';
+            m = [20 20]';
             
             F = [];
             M = [1 -1]';
