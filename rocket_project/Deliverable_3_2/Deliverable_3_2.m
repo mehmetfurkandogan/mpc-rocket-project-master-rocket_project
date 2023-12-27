@@ -71,8 +71,8 @@ x0_roll = [0 0]';
 % Open Loop Trajectory
 mpc_roll = MpcControl_roll(sys_roll, Ts, Tf);
 [u, T_opt, X_opt, U_opt] = mpc_roll.get_u(x0_roll, roll_ref);
-X_opt = X_opt - xs(11:12);
-U_opt = U_opt - us(4);
+X_opt = X_opt + xs(11:12);
+U_opt = U_opt + us(4);
 U_opt(:,end+1) = NaN;
 ph = rocket.plotvis_sub(T_opt, X_opt, U_opt, sys_roll, xs, us, roll_ref);
 exportgraphics(ph.fig,'plots/roll_ol.eps', BackgroundColor='none',ContentType='vector')
