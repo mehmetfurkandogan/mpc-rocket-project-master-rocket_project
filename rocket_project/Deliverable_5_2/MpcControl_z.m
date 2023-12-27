@@ -52,7 +52,7 @@ classdef MpcControl_z < MpcControlBase
             
             F = [];
             M = [1 -1]';
-            Q = 100*eye(nx);
+            Q = 10*eye(nx);
             R = 0.01*eye(nu);
             [~,Qf,~] = dlqr(mpc.A,mpc.B,Q,R);
 
@@ -139,7 +139,7 @@ classdef MpcControl_z < MpcControlBase
             A_bar = [mpc.A mpc.B; zeros(nu, nx) eye(nu)];
             B_bar = [mpc.B; zeros(nd,nu)];
             C_bar = [mpc.C zeros(ny, nu)];
-            L = -place(A_bar',C_bar',[0.4,0.5,0.6])';
+            L = -place(A_bar',C_bar',[0.97,0.99,0.98])';
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
