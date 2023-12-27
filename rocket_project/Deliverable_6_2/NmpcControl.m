@@ -51,7 +51,7 @@ classdef NmpcControl < handle
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             
-            Q = 100*eye(nx);
+            Q = 50*eye(nx);
             R = 0.1*eye(nu);
             
             ubx(4) = deg2rad(75);
@@ -175,8 +175,12 @@ classdef NmpcControl < handle
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % Delay compensation: Save current u
+            u_temp = full(nlp_x(id(1):id(1)+4*obj.expected_delay -1));
             if obj.expected_delay > 0
-               obj.mem_u = repmat(u, 1, obj.expected_delay);
+               obj.mem_u = obj.mem_u*0;
+               for i = 1:obj.expected_delay
+                    obj.mem_u(:,i) = u_temp(4*i-3:4*i,:);   
+               end 
             end
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

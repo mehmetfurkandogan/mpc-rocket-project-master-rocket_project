@@ -5,7 +5,7 @@ close all; clear; clc;
 %% TODO: This file should produce all the plots for the deliverable
 Ts = 1/40; 
 rocket = Rocket(Ts);
-delay = 2;
+delay = 4;
 H = 20*Ts;
 nmpc = NmpcControl(rocket, H, delay);
 x0 = zeros(12, 1);
