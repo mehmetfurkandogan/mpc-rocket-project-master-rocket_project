@@ -9,7 +9,7 @@ rocket = Rocket(Ts);
 [xs, us] = rocket.trim();
 sys = rocket.linearize(xs, us);
 [sys_x, sys_y, sys_z, sys_roll] = rocket.decompose(sys, xs, us);
-H = 20*Ts; % Closed-Loop Horizon length in seconds
+H = 40*Ts; % Closed-Loop Horizon length in seconds
 Tf = 10;
 
 %% mpc x
