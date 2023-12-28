@@ -99,7 +99,7 @@ classdef MpcControl_x < MpcControlBase
             R = eye(size(mpc.C,1));
 
             f = [deg2rad(10); deg2rad(10)];
-            m = [deg2rad(15), deg2rad(25)]';
+            m = [deg2rad(15), deg2rad(15)]';
             
             F = [0 1 0 0;0 -1 0 0];
             M = [1 -1]';
