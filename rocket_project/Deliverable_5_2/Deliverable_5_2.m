@@ -18,7 +18,7 @@ mpc_roll = MpcControl_roll(sys_roll, Ts, H);
 % Merge four sub−system controllers into one full−system controller
 mpc = rocket.merge_lin_controllers(xs, us, mpc_x, mpc_y, mpc_z, mpc_roll);
 %% Simulation
-Tf = 20;
+Tf = 7;
 x0 = [zeros(1, 9), 1 0 3]';
 ref = [1.2, 0, 3, 0]';
 % Manipulate mass for simulation
