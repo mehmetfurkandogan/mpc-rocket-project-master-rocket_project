@@ -15,7 +15,7 @@ nmpc = NmpcControl(rocket, H);
 
 % MPC reference with specified maximum roll = 50deg 
 rollmax = deg2rad(50); 
-ref = @(t_, x_) ref_TVC(t_/2, rollmax); 
+ref = @(t_, x_) ref_TVC(t_, rollmax); 
 
 % Evaluate once and plot optimal open−loop trajectory, 
 % pad last input to get consistent size with time and state 
@@ -24,8 +24,8 @@ ref = @(t_, x_) ref_TVC(t_/2, rollmax);
 % ph = rocket.plotvis(T_opt, X_opt, U_opt, ref);
 % exportgraphics(ph.fig,'plots/nmpc_ol.eps', BackgroundColor='none',ContentType='vector')
 
-Tf = 60;
+Tf = 30;
 [T,X,U,Ref] = rocket.simulate(x0,Tf, @nmpc.get_u, ref);
-rocket.anim_rate = 10;
+rocket.anim_rate = 3;
 ph = rocket.plotvis(T, X, U, Ref);
 exportgraphics(ph.fig,'plots/nmpc_cl.eps', BackgroundColor='none',ContentType='vector')
