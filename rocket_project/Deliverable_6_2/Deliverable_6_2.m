@@ -22,7 +22,7 @@ exportgraphics(ph.fig,'plots/delay_compansated_nmpc_corrected.eps', BackgroundCo
 %% Partially Compansated
 Ts = 1/40; 
 rocket = Rocket(Ts);
-expected_delay = 3;
+expected_delay = 4;
 delay = 5;
 H = 20*Ts;
 nmpc = NmpcControl(rocket, H, expected_delay);
