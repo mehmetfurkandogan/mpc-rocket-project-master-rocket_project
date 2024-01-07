@@ -51,8 +51,8 @@ classdef NmpcControl < handle
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             
-            Q = 100*eye(nx);
-            R = 0.1*eye(nu);
+            Q = diag([10 10 10 1 1 200 10 10 10 1000 1000 1000]);
+            R = 0.01*eye(nu);
             
             ubx(5) = deg2rad(75);
             lbx(5) = -deg2rad(75);
