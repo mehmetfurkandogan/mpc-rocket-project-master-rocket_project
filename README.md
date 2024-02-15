@@ -10,8 +10,6 @@ comparative analysis of its performance against the linear MPC.
 ## Table of Contents
 
 - [Installation](#installation)
-- [Usage](#usage)
-- [Features](#features)
 - [Contributors](#contributors)
 
 ## Installation
