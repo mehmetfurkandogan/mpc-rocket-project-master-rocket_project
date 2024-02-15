@@ -18,10 +18,6 @@ comparative analysis of its performance against the linear MPC.
 
 This project requires MATLAB with CASADI. To run the project just download the rocket_project folder and run the deliverables.
 
-## Usage
-
-## Features
-
 ## Contributors
 Ali Fuat Sahin,
 Mehmet Furkan Dogan,
