@@ -1,4 +1,4 @@
-# mpc-rocket-project-master-rocket_project
+# MPC Design for a Rocket
 
 In this project, we focused on creating an MPC system for a rocket prototype. This involved
 designing an MPC regulator, incorporating tracking mechanisms, and implementing an estimator to
