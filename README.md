@@ -23,6 +23,6 @@ This project requires MATLAB with CASADI. To run the project just download the r
 ## Features
 
 ## Contributors
-Ali Fuat Sahin
-Mehmet Furkan Dogan
+Ali Fuat Sahin,
+Mehmet Furkan Dogan,
 Emre Gürsoy
